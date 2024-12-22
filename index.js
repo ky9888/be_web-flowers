@@ -17,7 +17,8 @@ const URI_DB = process.env.URI_DB;
 connect(URI_DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 40000
+  serverSelectionTimeoutMS: 5000,  
+  socketTimeoutMS: 10000 
    
 });
 
