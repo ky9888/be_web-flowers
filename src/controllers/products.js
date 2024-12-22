@@ -63,7 +63,7 @@ export const getDetailProduct = async (req, res) => {
   let productName = req.params.name;
 
   try {
-    const productDetail = await products.findOne({ name: productName }).maxTimeMS(10000);
+    const productDetail = await products.findOne({ name: productName }).maxTimeMS(20000);
     return res.status(200).json({
       message: "tìm  sản phẩm thành công",
       data: productDetail,
