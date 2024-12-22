@@ -14,7 +14,12 @@ export const config = {
 };
 const PORT = process.env.PORT || process.env.URL_API;
 const URI_DB = process.env.URI_DB;
-connect(URI_DB);
+connect(URI_DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 15000
+   
+});
 
 
 
