@@ -63,7 +63,7 @@ export const getDetailProduct = async (req, res) => {
   let productName = req.params.name;
 
   try {
-    const productDetail = await products.findOne({ name: productName });
+    const productDetail = await products.findOne({ name: productName }).maxTimeMS(10000);
     return res.status(200).json({
       message: "tìm  sản phẩm thành công",
       data: productDetail,
@@ -73,6 +73,7 @@ export const getDetailProduct = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+
 function formatPrice(price) {
   const cleanedPrice = price.trim().replace(/\./g, "");
   return parseFloat(cleanedPrice);
@@ -145,4 +146,36 @@ export const deleteProduct = async (req, res) => {
   } catch (error) {
     res.status(500).send(error.message);
   }
+};
+
+let comments = []; // Lưu trữ dữ liệu tạm thời (khuyến nghị dùng DB)
+
+export const getComment = async (req, res) => {
+  try {
+    res.json(comments);
+  } catch (error) {
+    res.status(500).json({ error: "Lỗi khi lấy bình luận" });
+  }
+};
+
+export const postComment = async (req, res) => {
+  try {
+    const { text } = req.body;
+    
+    if (!text || typeof text !== "string" || text.trim() === "") {
+      return res.status(400).json({ error: "Bình luận không được để trống" });
+    }
+
+    const newComment = { id: Date.now(), text: text.trim() };
+    comments.push(newComment);
+
+    res.status(201).json(newComment);
+  } catch (error) {
+    res.status(500).json({ error: "Lỗi khi thêm bình luận" });
+  }
+};
+export const deleteComment = async (req, res) => {
+  const commentId = req.params.id;
+  comments = comments.filter(comment => comment.id !== parseInt(commentId));
+  res.json({ message: "Xóa bình luận thành công" });
 };
